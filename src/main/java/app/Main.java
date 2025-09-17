@@ -25,7 +25,6 @@ public class Main {
         boolean fetchAndSave = false;
         if(fetchAndSave) {
 
-            // 1. Fetch Danish movies from the last 5 years
             int currentYear = LocalDate.now().getYear();
             int startYear = currentYear - 5;
 
@@ -52,6 +51,13 @@ public class Main {
         }
 
         //TODO: Multithreading for database for more effective runtime
+        //TODO: Missing MovieService.getMoviesByGenre(String name).
+
+        //MovieService.updateMovie(Long tmdbId, String newTitle, LocalDate newDate)
+
+        //MovieService.deleteMovie(Long tmdbId)
+
+        //MovieService.getTop10LowestRated()
         System.out.println("=== Data fetch complete ===");
 
 

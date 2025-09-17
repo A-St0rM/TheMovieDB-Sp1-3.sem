@@ -29,7 +29,7 @@ public class MovieService {
             return;
         }
 
-        // Convert genres (brug eksisterende hvis muligt)
+        // Convert genres
         Set<Genre> genres = dto.getGenres().stream()
                 .map(g -> {
                     Genre existing = genreDAO.findByTmdbId(g.getId());
@@ -41,7 +41,7 @@ public class MovieService {
                 })
                 .collect(Collectors.toSet());
 
-        // Convert actors (limit til top 10, brug eksisterende hvis muligt)
+        // Convert actors
         Set<Actor> actors = dto.getCredits().getCast().stream()
                 .sorted((c1, c2) -> c1.getOrder().compareTo(c2.getOrder()))
                 .limit(10)
@@ -55,7 +55,7 @@ public class MovieService {
                 })
                 .collect(Collectors.toSet());
 
-        // Find director fra crew (brug eksisterende hvis muligt)
+        // Find director fra crew
         Director director = dto.getCredits().getCrew().stream()
                 .filter(c -> c.getJob().equalsIgnoreCase("Director"))
                 .findFirst()
@@ -69,7 +69,6 @@ public class MovieService {
                 })
                 .orElse(null);
 
-        // Build Movie entity
         Movie movie = Movie.builder()
                 .tmdbId(dto.getId())
                 .title(dto.getTitle())
@@ -85,25 +84,19 @@ public class MovieService {
         movieDAO.save(movie);
     }
 
-    /**
-     * Get all movies from DB.
-     */
+
     public Set<Movie> getAllMovies() {
         return movieDAO.findAll().stream()
                 .collect(Collectors.toSet());
     }
 
-    /**
-     * Search for movies by title (case insensitive).
-     */
+
     public Set<Movie> searchMovies(String keyword) {
         return movieDAO.searchByTitle(keyword).stream()
                 .collect(Collectors.toSet());
     }
 
-    /**
-     * Get top-10 highest rated movies.
-     */
+
     public Set<Movie> getTop10HighestRated() {
         return movieDAO.findAll().stream()
                 .sorted((m1, m2) -> {
@@ -118,9 +111,7 @@ public class MovieService {
                 .collect(Collectors.toSet());
     }
 
-    /**
-     * Get top-10 most popular movies.
-     */
+
     public Set<Movie> getTop10MostPopular() {
         return movieDAO.findAll().stream()
                 .sorted((m1, m2) -> {
@@ -135,9 +126,6 @@ public class MovieService {
                 .collect(Collectors.toSet());
     }
 
-    /**
-     * Compute average rating of all movies.
-     */
     public Double getAverageRating() {
         return movieDAO.findAll().stream()
                 .map(m -> m.getVoteAverage())
