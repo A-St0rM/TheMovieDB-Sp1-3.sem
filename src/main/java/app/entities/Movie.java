@@ -15,19 +15,24 @@ import java.util.Set;
 public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
+    private Long tmdbId;
     private String title;
+
+    @Column(length = 5000)
     private String overview;
     private String releaseDate;
+    private Double voteAverage;
+    private Double popularity;
 
     //Maybe make a join table if having extra time
-    @ManyToMany(cascade = CascadeType.ALL) //TODO: Maybe not cascade here?
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER) //TODO: Maybe not cascade here?
     private Set<Actor> actors = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.ALL) //TODO: Maybe not cascade here?
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER) //TODO: Maybe not cascade here?
     private Set<Genre> genres = new HashSet<>();
 
-    @ManyToOne(cascade = CascadeType.ALL) //TODO: Maybe not cascade here?
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER) //TODO: Maybe not cascade here?
     private Director director;
 }

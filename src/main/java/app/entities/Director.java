@@ -18,5 +18,6 @@ public class Director {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long tmdbId;
     private String name;
 }
