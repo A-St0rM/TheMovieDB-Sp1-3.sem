@@ -51,10 +51,10 @@ public class Main {
             }
         }
 
-
+        //TODO: Multithreading for database for more effective runtime
         System.out.println("=== Data fetch complete ===");
 
-        // 2. Demonstrate queries
+
         System.out.println("\nAll movies:");
         Set<Movie> allMovies = movieService.getAllMovies();
         allMovies.forEach(m -> System.out.println(" - " + m.getTitle()));
