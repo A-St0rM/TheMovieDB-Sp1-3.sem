@@ -134,4 +134,26 @@ public class MovieService {
                 .average()
                 .orElse(0.0);
     }
+
+
+    //MovieService.getTop10LowestRated()
+    public Set<Movie> getTop10LowestRated() {
+        return movieDAO.findAll().stream()
+                .sorted((m1, m2) -> {
+                    Double p1 = m1.getPopularity();
+                    Double p2 = m2.getPopularity();
+                    if (p1 == null && p2 == null) return 0;
+                    if (p1 == null) return 1;
+                    if (p2 == null) return -1;
+                    return p1.compareTo(p2);
+                })
+                .limit(10)
+                .collect(Collectors.toSet());
+    }
+
+    public void deleteMovie(Movie movie) {
+        movieDAO.delete(movie);
+    }
+
 }
+

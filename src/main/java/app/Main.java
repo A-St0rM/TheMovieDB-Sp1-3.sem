@@ -51,13 +51,12 @@ public class Main {
         }
 
         //TODO: Multithreading for database for more effective runtime
-        //TODO: Missing MovieService.getMoviesByGenre(String name).
 
+        //TODO: Missing MovieService.getMoviesByGenre(String name).
         //MovieService.updateMovie(Long tmdbId, String newTitle, LocalDate newDate)
 
-        //MovieService.deleteMovie(Long tmdbId)
 
-        //MovieService.getTop10LowestRated()
+
         System.out.println("=== Data fetch complete ===");
 
 
@@ -71,6 +70,10 @@ public class Main {
 
         System.out.println("\nTop 10 highest rated:");
         movieService.getTop10HighestRated().forEach(m ->
+                System.out.println(" - " + m.getTitle() + " (" + m.getVoteAverage() + ")"));
+
+        System.out.println("\nTop 10 lowest rated:");
+        movieService.getTop10LowestRated().forEach(m ->
                 System.out.println(" - " + m.getTitle() + " (" + m.getVoteAverage() + ")"));
 
         System.out.println("\nTop 10 most popular:");
@@ -88,6 +91,8 @@ public class Main {
 
         System.out.println("\nAll genres:");
         genreService.getAllGenres().forEach(g -> System.out.println(" - " + g.getName()));
+
+        //movieService.deleteMovie();
     }
 
 }
