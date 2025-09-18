@@ -10,6 +10,7 @@ import app.entities.Director;
 import app.entities.Genre;
 import app.entities.Movie;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -140,8 +141,8 @@ public class MovieService {
     public Set<Movie> getTop10LowestRated() {
         return movieDAO.findAll().stream()
                 .sorted((m1, m2) -> {
-                    Double p1 = m1.getPopularity();
-                    Double p2 = m2.getPopularity();
+                    Double p1 = m1.getVoteAverage();
+                    Double p2 = m2.getVoteAverage();
                     if (p1 == null && p2 == null) return 0;
                     if (p1 == null) return 1;
                     if (p2 == null) return -1;
@@ -151,9 +152,40 @@ public class MovieService {
                 .collect(Collectors.toSet());
     }
 
-    public void deleteMovie(Movie movie) {
-        movieDAO.delete(movie);
+    public void deleteMovie(Long tmdbId) {
+        Movie movie = movieDAO.findByTmdbId(tmdbId);
+        if (movie != null) {
+            movieDAO.delete(movie);
+            System.out.println("Deleted movie: " + movie.getTitle());
+        } else {
+            System.out.println("Movie not found with TMDB ID: " + tmdbId);
+        }
     }
+
+
+    public List<Movie> getMoviesByGenre(String name) {
+        return movieDAO.findAll().stream()
+                .filter(m -> m.getGenres() != null &&
+                        m.getGenres().stream().anyMatch(g -> g.getName().equalsIgnoreCase(name)))
+                .toList();
+    }
+
+    public void updateMovie(Long tmdbId, String newTitle, String newReleaseDate) {
+        Movie movie = movieDAO.findByTmdbId(tmdbId);
+        if (movie != null) {
+            if (newTitle != null && !newTitle.isBlank()) {
+                movie.setTitle(newTitle);
+            }
+            if (newReleaseDate != null && !newReleaseDate.isBlank()) {
+                movie.setReleaseDate(newReleaseDate);
+            }
+            movieDAO.update(movie);
+            System.out.println("Updated movie: " + movie.getTitle() + " (" + movie.getReleaseDate() + ")");
+        } else {
+            System.out.println("Movie not found with TMDB ID: " + tmdbId);
+        }
+    }
+
 
 }
 

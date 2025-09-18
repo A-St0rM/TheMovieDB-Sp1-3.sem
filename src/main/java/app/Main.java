@@ -52,10 +52,6 @@ public class Main {
 
         //TODO: Multithreading for database for more effective runtime
 
-        //TODO: Missing MovieService.getMoviesByGenre(String name).
-        //MovieService.updateMovie(Long tmdbId, String newTitle, LocalDate newDate)
-
-
 
         System.out.println("=== Data fetch complete ===");
 
@@ -92,7 +88,13 @@ public class Main {
         System.out.println("\nAll genres:");
         genreService.getAllGenres().forEach(g -> System.out.println(" - " + g.getName()));
 
+
+        System.out.println("All movies with the genre Horror");
+        movieService.getMoviesByGenre("Horror").forEach(m -> System.out.println(" - " + m.getTitle()));
+
         //movieService.deleteMovie();
+
+        //movieService.updateMovie(12345L, "Ny titel", "2025-01-01");
     }
 
 }
