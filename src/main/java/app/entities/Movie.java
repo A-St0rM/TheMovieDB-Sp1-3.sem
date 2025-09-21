@@ -11,6 +11,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(exclude = {"id", "actors", "genres", "director"})
 @Entity
 public class Movie {
     @Id
@@ -28,9 +29,11 @@ public class Movie {
 
     //Maybe make a join table if having extra time
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER) //TODO: Maybe not cascade here?
+    @Builder.Default
     private Set<Actor> actors = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER) //TODO: Maybe not cascade here?
+    @Builder.Default
     private Set<Genre> genres = new HashSet<>();
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER) //TODO: Maybe not cascade here?

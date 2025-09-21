@@ -10,6 +10,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.junit.jupiter.api.Assertions.*;
 class MovieDAOTest {
     private static EntityManagerFactory emf;
@@ -36,7 +41,7 @@ class MovieDAOTest {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             em.createQuery("DELETE FROM Movie").executeUpdate();
-            em.createNativeQuery("ALTER SEQUENCE parcel_id_seq RESTART WITH 1").executeUpdate();
+            em.createNativeQuery("ALTER SEQUENCE movie_id_seq RESTART WITH 1").executeUpdate();
             em.getTransaction().commit();
 
             Movie[] testMovie = MoviePopulator.populate(dao);
@@ -49,9 +54,28 @@ class MovieDAOTest {
 
     @Test
     void searchByTitle() {
+        List<Movie> results = dao.searchByTitle("inception");
+
+        assertThat(results, hasSize(1));
+
+        Movie found = results.get(0);
+
+        assertEquals(m2, found);
+
+        assertThat(found, samePropertyValuesAs(m2, "id"));
     }
 
     @Test
     void findByTmdbId() {
+        Movie found = dao.findByTmdbId(m1.getTmdbId());
+
+        assertNotNull(found);
+
+        assertEquals(m1, found);
+
+        assertThat(found, samePropertyValuesAs(m1, "id"));
+
+        Movie notFound = dao.findByTmdbId(9999999L);
+        assertNull(notFound);
     }
 }
