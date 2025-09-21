@@ -22,7 +22,7 @@ public class GenericDAO<T> {
         this.emf = emf;
     }
 
-    public void save(T entity) {
+    public T save(T entity) {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
@@ -31,6 +31,7 @@ public class GenericDAO<T> {
         } finally {
             em.close();
         }
+        return entity;
     }
 
     public T findById(Object id) {
@@ -52,7 +53,7 @@ public class GenericDAO<T> {
         }
     }
 
-    public void update(T entity) {
+    public T update(T entity) {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
@@ -61,6 +62,7 @@ public class GenericDAO<T> {
         } finally {
             em.close();
         }
+        return entity;
     }
 
     public void delete(Object id) {

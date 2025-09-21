@@ -2,11 +2,17 @@ package app.DAO;
 
 import app.entities.Actor;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
 
 public class ActorDAO extends GenericDAO<Actor> {
     public ActorDAO() {
         super(Actor.class);
+    }
+
+    //For test
+    public ActorDAO(EntityManagerFactory emf) {
+        super(Actor.class, emf);
     }
 
     public Actor findByTmdbId(Long tmdbId) {

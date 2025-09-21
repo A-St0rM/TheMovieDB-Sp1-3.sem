@@ -1,5 +1,6 @@
 package app.DAO;
 
+import app.DAO.Populator.ActorPopulator;
 import app.config.HibernateConfig;
 import app.entities.Actor;
 import app.exceptions.ApiException;
@@ -13,8 +14,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ActorDAOTest {
 
@@ -23,24 +22,30 @@ class ActorDAOTest {
     private Actor actor1;
     private Actor actor2;
     private Actor actor3;
-    private List<Actor> actors;
+    private List<Actor> testActors;
 
     @BeforeAll
     void initOnce() {
+        HibernateConfig.setTest(true);
         emf = HibernateConfig.getEntityManagerFactoryForTest();
-        actorDAO = new ActorDAO();
+        actorDAO = new ActorDAO(emf);
     }
 
     @BeforeEach
     void setUp() {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            em.createNativeQuery("TRUNCATE TABLE ? RESTART IDENTITY CASCADE")
-                    .executeUpdate();
+            em.createQuery("DELETE FROM Actor").executeUpdate();
+            em.createNativeQuery("ALTER SEQUENCE actor_id_seq RESTART WITH 1").executeUpdate();
             em.getTransaction().commit();
+
+            Actor[] testActors = ActorPopulator.populate(actorDAO);
+            actor1 = testActors[0];
+            actor2 = testActors[1];
+            actor3 = testActors[2];
         }
         catch (Exception e) {
-            throw new RuntimeException("Failed to truncate tables", e);
+            throw new RuntimeException("Failed to alter tables", e);
         }
     }
 
@@ -73,7 +78,7 @@ class ActorDAOTest {
         // Act
         Actor actor = actorDAO.findById(actor1.getId());
         // Assert
-        assertNotNull(actors);
+        assertNotNull(testActors);
         assertThat(actor, hasProperty("id", is(actor1.getId())));
         assertThat(actor, hasProperty("name", is(actor1.getName())));
         assertEquals(actor, actor1);
