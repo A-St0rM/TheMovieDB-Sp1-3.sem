@@ -3,6 +3,7 @@ package app.DAO;
 import app.DAO.Populator.GenrePopulator;
 import app.config.HibernateConfig;
 import app.entities.Genre;
+import app.entities.Movie;
 import app.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -150,5 +151,13 @@ class GenreDAOTest {
         Genre genre = genreDAO.findByTmdbId((int) genre3.getId());
         // Assert
         assertEquals(genre, genre3);
+    }
+
+    @Test
+    void findByName() {
+        // Act
+        Genre genre = genreDAO.findByName(genre1.getName());
+        // Assert
+        assertEquals(genre, genre1);
     }
 }
