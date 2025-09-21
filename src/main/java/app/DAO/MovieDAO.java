@@ -3,6 +3,7 @@ package app.DAO;
 import app.entities.Genre;
 import app.entities.Movie;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
 
 import java.util.List;
@@ -13,6 +14,12 @@ public class MovieDAO extends GenericDAO<Movie> {
     public MovieDAO() {
         super(Movie.class);
     }
+
+    //For test
+    public MovieDAO(EntityManagerFactory emf) {
+        super(Movie.class, emf);
+    }
+
 
     public List<Movie> searchByTitle(String keyword) {
         var em = emf.createEntityManager();

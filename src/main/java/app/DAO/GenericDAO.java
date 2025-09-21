@@ -16,6 +16,12 @@ public class GenericDAO<T> {
         this.emf = HibernateConfig.getEntityManagerFactory();
     }
 
+    //For test
+    public GenericDAO(Class<T> entityClass, EntityManagerFactory emf) {
+        this.entityClass = entityClass;
+        this.emf = emf;
+    }
+
     public void save(T entity) {
         EntityManager em = emf.createEntityManager();
         try {
