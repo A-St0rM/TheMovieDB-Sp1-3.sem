@@ -1,8 +1,10 @@
 package app.DAO;
 
+import app.entities.Actor;
 import app.entities.Genre;
 import app.entities.Movie;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
 
 import java.util.List;
@@ -11,6 +13,10 @@ import java.util.Set;
 public class GenreDAO extends GenericDAO<Genre> {
     public GenreDAO() {
         super(Genre.class);
+    }
+
+    public GenreDAO(EntityManagerFactory emf) {
+        super(Genre.class, emf);
     }
 
     public Genre findByName(String name) {

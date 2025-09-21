@@ -1,12 +1,18 @@
 package app.DAO;
 
+import app.entities.Actor;
 import app.entities.Director;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
 
 public class DirectorDAO extends GenericDAO<Director> {
     public DirectorDAO() {
         super(Director.class);
+    }
+
+    public DirectorDAO(EntityManagerFactory emf) {
+        super(Director.class, emf);
     }
 
     public Director findByTmdbId(Long tmdbId) {
